@@ -5,45 +5,6 @@
              version="2.2">
 
     <!-- Unité de persistence charger à la création de la factory - voir GestionFactory -->
-    <persistence-unit name="Projet_JPA_SQLITE" transaction-type="RESOURCE_LOCAL">
-
-        <!-- Provider implémentant le standard JPA - dans notre cas EclipseLink -->
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-
-        <!-- Classes persistées - liées à tes tables de la base de données -->
-        <class>fr.iut2.ProjetJPA.data.student.Student</class>
-        <class>fr.iut2.ProjetJPA.data.group.Group</class>
-        <class>fr.iut2.ProjetJPA.data.absence.Absence</class>
-        <class>fr.iut2.ProjetJPA.data.module.Module</class>
-        <class>fr.iut2.ProjetJPA.data.exam.Exam</class>
-        <class>fr.iut2.ProjetJPA.data.mark.Mark</class>
-
-        <!-- Propriétés de l'unité de persistence -->
-        <properties>
-
-            <!-- JDBC connection properties -->
-            <!--  en SqlLite, sur un fichier de votre arborescence (en windows c:/etc...) -->
-            <property name="javax.persistence.jdbc.url"
-                      value="jdbc:sqlite:/home/joris/LP_AW/MI4_Developpement_web_java/BD/ProjetJPA.sql"/>
-            <property name="javax.persistence.jdbc.user" value=""/>
-            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
-
-            <!-- Propriétés propre à EclipseLink -->
-            <!-- EclipseLink should create the database schema automatically -->
-            <property name="eclipselink.ddl-generation" value="create-tables"/>
-            <property name="eclipselink.target-database" value="auto"/>
-            <property name="eclipselink.ddl-generation.index-foreign-keys" value="false"/>
-            <property name="eclipselink.ddl-generation.output-mode" value="both"/>
-            <property name="eclipselink.application-location" value="/home/joris/LP_AW/MI4_Developpement_web_java/BD/"/>
-            <!-- Disable EclipseLink cache - certains enregistrement n'était pas mis à jour en BD -->
-            <property name="eclipselink.cache.shared.default" value="false"/>
-            <property name="eclipselink.cache.type.default" value="NONE"/>
-
-        </properties>
-    </persistence-unit>
-
-
-    <!-- Unité de persistence charger à la création de la factory - voir GestionFactory -->
     <persistence-unit name="Projet_JPA_MYSQL" transaction-type="RESOURCE_LOCAL">
 
         <!-- Provider implémentant le standard JPA - dans notre cas EclipseLink -->
@@ -64,10 +25,10 @@
             <!-- url pointant : -->
             <!--  en SqlLite, sur un fichier de votre arborescence (en windows c:/etc...) -->
             <!--  en MySql, sur une url du serveur par exemple en local http;//localhost:3306 -->
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:6603/iut2_projetjpa"/>
             <property name="javax.persistence.jdbc.user" value="projetjpa"/>
             <property name="javax.persistence.jdbc.password" value="X3YEbHqrWx5648NW"/>
-                <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/iut2_projetjpa"/>
 
             <!-- Propriétés propre à EclipseLink -->
             <!-- EclipseLink should create the database schema automatically -->

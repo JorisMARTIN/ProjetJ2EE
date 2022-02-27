@@ -15,6 +15,9 @@ public class Group implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue
+    private Integer id;
+
     private String name;
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})    // LAZY = fetch when needed, EAGER = fetch immediately
@@ -28,9 +31,12 @@ public class Group implements Serializable {
     )
     private List<Module> modules;
 
-
     public Group() {
         super();
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {
@@ -46,11 +52,14 @@ public class Group implements Serializable {
     }
 
     public void addStudent(Student student) {
-        if (!this.students.contains(student)) {
+        if (student.getId() == null || !this.students.contains(student)) {
             this.students.add(student);
-            student.getGroup().getStudents().remove(student);
             student.setGroup(this);
         }
+    }
+
+    public void removeStudent(Student student) {
+        this.students.remove(student);
     }
 
     public List<Module> getModules() {
@@ -76,12 +85,12 @@ public class Group implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Group)) return false;
         Group group = (Group) o;
-        return getName().equals(group.getName());
+        return Objects.equals(getId(), group.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName());
+        return Objects.hash(getId());
     }
 
     @Override

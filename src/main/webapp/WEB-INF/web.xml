@@ -8,40 +8,54 @@
     <!-- Titre de l'application -->
     <context-param>
         <param-name>title</param-name>
-        <param-value>Projet JPA</param-value>
+        <param-value>Gestion des étudiants</param-value>
     </context-param>
 
     <!-- URLs communes aux vues -->
     <context-param>
-        <param-name>entetedepage</param-name>
-        <param-value>/WEB-INF/JSP/commun/entetedepage.jsp</param-value>
-    </context-param>
-    <context-param>
-        <param-name>pieddepage</param-name>
-        <param-value>/WEB-INF/JSP/commun/pieddepage.jsp</param-value>
+        <param-name>header</param-name>
+        <param-value>/WEB-INF/JSP/commun/header.jsp</param-value>
     </context-param>
 
-
-    <!--========= Projet Etape 3 MVC =========== -->
     <!-- Servlet controleur -->
     <servlet>
         <servlet-name>controleur</servlet-name>
         <servlet-class>fr.iut2.ProjetJPA.controller.Controller</servlet-class>
         <init-param>
-            <param-name>urlEtudiants</param-name>
-            <param-value>/WEB-INF/JSP/etudiants.jsp</param-value>
+            <param-name>indexUrl</param-name>
+            <param-value>/WEB-INF/JSP/index.jsp</param-value>
         </init-param>
         <init-param>
-            <param-name>urlGroupes</param-name>
-            <param-value>/WEB-INF/JSP/groupes.jsp</param-value>
+            <param-name>studentsUrl</param-name>
+            <param-value>/WEB-INF/JSP/students/index.jsp</param-value>
         </init-param>
         <init-param>
-            <param-name>urlFicheEtudiant</param-name>
-            <param-value>/WEB-INF/JSP/ficheEtudiant.jsp</param-value>
+            <param-name>studentDetailUrl</param-name>
+            <param-value>/WEB-INF/JSP/students/student_detail.jsp</param-value>
         </init-param>
         <init-param>
-            <param-name>urlEditionEtudiant</param-name>
-            <param-value>/WEB-INF/JSP/editionEtudiant.jsp</param-value>
+            <param-name>groupsUrl</param-name>
+            <param-value>/WEB-INF/JSP/groups/index.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>absencesUrl</param-name>
+            <param-value>/WEB-INF/JSP/absences/index.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>modulesUrl</param-name>
+            <param-value>/WEB-INF/JSP/modules/index.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>moduleDetailUrl</param-name>
+            <param-value>/WEB-INF/JSP/modules/module_detail.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>examsUrl</param-name>
+            <param-value>/WEB-INF/JSP/exams/index.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>marksUrl</param-name>
+            <param-value>/WEB-INF/JSP/marks/index.jsp</param-value>
         </init-param>
     </servlet>
 

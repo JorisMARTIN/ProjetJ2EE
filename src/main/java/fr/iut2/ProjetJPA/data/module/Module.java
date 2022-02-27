@@ -14,10 +14,18 @@ public class Module implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue
+    private Integer id;
+
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "modules")
+    @ManyToMany
+    @JoinTable(
+            name = "followed_modules",
+            joinColumns = @JoinColumn(name = "module_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
     private List<Group> groups;
 
     @OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -25,6 +33,10 @@ public class Module implements Serializable {
 
     public Module() {
         super();
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {
@@ -76,12 +88,12 @@ public class Module implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Module)) return false;
         Module module = (Module) o;
-        return Objects.equals(getName(), module.getName());
+        return Objects.equals(getId(), module.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName());
+        return Objects.hash(getId());
     }
 
     @Override

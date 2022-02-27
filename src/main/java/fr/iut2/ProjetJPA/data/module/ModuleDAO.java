@@ -18,6 +18,22 @@ public class ModuleDAO {
         return module;
     }
 
+    public static Module findByName(String name) {
+        EntityManager em = GestionFactory.factory.createEntityManager();
+
+        em.getTransaction().begin();
+
+        List<Module> modules = em.createQuery("SELECT m FROM Module as m WHERE m.name = :name", Module.class)
+                .setParameter("name", name)
+                .getResultList();
+
+        em.getTransaction().commit();
+
+        em.close();
+
+        return modules.size() > 0 ? modules.get(0) : null;
+    }
+
     public static Module create(String name) {
 
         EntityManager em = GestionFactory.factory.createEntityManager();

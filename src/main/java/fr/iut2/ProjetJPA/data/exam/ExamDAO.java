@@ -5,12 +5,23 @@ import fr.iut2.ProjetJPA.data.module.Module;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class ExamDAO {
 
-    public static Exam create(String name, Date date, Module module) {
+    public static Exam findById(int id) {
+
+        EntityManager em = GestionFactory.factory.createEntityManager();
+
+        Exam exam = em.find(Exam.class, id);
+
+        em.close();
+
+        return exam;
+    }
+
+    public static Exam create(String name, Timestamp date, int coef, Module module) {
 
         EntityManager em = GestionFactory.factory.createEntityManager();
 
@@ -20,6 +31,7 @@ public class ExamDAO {
 
         exam.setName(name);
         exam.setDate(date);
+        exam.setCoeficient(coef);
         exam.setModule(module);
 
         em.persist(exam);

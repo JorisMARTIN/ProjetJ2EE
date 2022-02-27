@@ -1,11 +1,13 @@
 package fr.iut2.ProjetJPA.data.exam;
 
+import fr.iut2.ProjetJPA.data.group.Group;
 import fr.iut2.ProjetJPA.data.mark.Mark;
 import fr.iut2.ProjetJPA.data.module.Module;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,10 +24,13 @@ public class Exam implements Serializable {
     private String name;
 
     @Column(nullable = false)
-    private Date date;
+    private float coeficient;
+
+    @Column(nullable = false)
+    private Timestamp date;
 
     @ManyToOne
-    @JoinColumn(name = "module_name", nullable = false)
+    @JoinColumn(name = "module_id", nullable = false)
     private Module module;
 
     @OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -47,11 +52,19 @@ public class Exam implements Serializable {
         this.name = name;
     }
 
-    public Date getDate() {
+    public float getCoeficient() {
+        return coeficient;
+    }
+
+    public void setCoeficient(float coeficient) {
+        this.coeficient = coeficient;
+    }
+
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
@@ -60,15 +73,22 @@ public class Exam implements Serializable {
     }
 
     public void setModule(Module module) {
-        if (!this.module.equals(module)) {
-            this.module = module;
-            if (module != null) {
-                module.addExam(this);
-            }
-        }
+       if (!Objects.equals(this.module, module)) {
+           this.module = module;
+           module.addExam(this);
+       }
     }
 
     public List<Mark> getMarks() {
+        return marks;
+    }
+
+    public List<Mark> getGroupMarks (Group group) {
+        ArrayList<Mark> marks = new ArrayList<>();
+        for (Mark mark : this.getMarks()) {
+            if (mark.getStudent().getGroup().getId() == group.getId()) marks.add(mark);
+        }
+
         return marks;
     }
 
@@ -91,7 +111,7 @@ public class Exam implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Exam)) return false;
         Exam exam = (Exam) o;
-        return getId() == exam.getId();
+        return Objects.equals(getId(), exam.getId());
     }
 
     @Override

@@ -5,12 +5,26 @@ import fr.iut2.ProjetJPA.data.student.Student;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 public class AbsenceDAO {
 
-    public static Absence create(Date date, Student student) {
+    public static Absence findById(int absenceId) {
+
+        EntityManager em = GestionFactory.factory.createEntityManager();
+
+        em.getTransaction().begin();
+
+        Absence abs = em.find(Absence.class, absenceId);
+
+        em.close();
+
+        return abs;
+    }
+
+    public static Absence create(Timestamp startTime, Timestamp endTime, Student student) {
 
         EntityManager em = GestionFactory.factory.createEntityManager();
 
@@ -18,7 +32,8 @@ public class AbsenceDAO {
 
         Absence absence = new Absence();
 
-        absence.setDate(date);
+        absence.setStartTime(startTime);
+        absence.setEndTime(endTime);
         absence.setStudent(student);
 
         em.persist(absence);
@@ -56,6 +71,19 @@ public class AbsenceDAO {
         em.close();
     }
 
+    public static void removeById(int absenceId) {
+        EntityManager em = GestionFactory.factory.createEntityManager();
+
+        em.getTransaction().begin();
+
+        em.createQuery("DELETE FROM Absence AS a WHERE a.id = :id")
+                .setParameter("id", absenceId)
+                .executeUpdate();
+
+        em.getTransaction().commit();
+        em.close();
+    }
+
     public static int removeAll() {
 
         EntityManager em = GestionFactory.factory.createEntityManager();
@@ -76,6 +104,7 @@ public class AbsenceDAO {
 
         @SuppressWarnings("unchecked")
         List<Absence> absenceList = q.getResultList();
+        Collections.sort(absenceList);
 
         return absenceList;
     }

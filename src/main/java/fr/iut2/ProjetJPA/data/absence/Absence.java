@@ -4,11 +4,11 @@ import fr.iut2.ProjetJPA.data.student.Student;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-public class Absence implements Serializable {
+public class Absence implements Serializable, Comparable<Absence> {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +17,10 @@ public class Absence implements Serializable {
     private Integer id;
 
     @Column(nullable = false)
-    private Date date;
+    private Timestamp startTime;
+
+    @Column(nullable = false)
+    private Timestamp endTime;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
@@ -31,12 +34,20 @@ public class Absence implements Serializable {
         return id;
     }
 
-    public Date getDate() {
-        return date;
+    public Timestamp getStartTime() {
+        return startTime;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
     }
 
     public Student getStudent() {
@@ -44,10 +55,10 @@ public class Absence implements Serializable {
     }
 
     public void setStudent(Student student) {
-        if (!this.student.equals(student)) {
+        if (this.student != null && this.student.equals(student)) return;
             this.student = student;
-            if (student != null) student.addAbsence(this);
-        }
+            student.addAbsence(this);
+
     }
 
     @Override
@@ -65,6 +76,11 @@ public class Absence implements Serializable {
 
     @Override
     public String toString() {
-        return "Absence [" + this.getId() + "] Date: " + this.getDate() + " | StudentId: " + this.getStudent().getId();
+        return "Absence [" + this.getId() + "] Start time : " + this.getStartTime() + ", End time : " + this.getEndTime() + " | StudentId: " + this.getStudent().getId();
+    }
+
+    @Override
+    public int compareTo(Absence o) {
+        return this.getStartTime().compareTo(o.getStartTime());
     }
 }

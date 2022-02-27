@@ -3,75 +3,84 @@ package fr.iut2.ProjetJPA.data._test;
 import fr.iut2.ProjetJPA.data.GestionFactory;
 import fr.iut2.ProjetJPA.data.group.Group;
 import fr.iut2.ProjetJPA.data.group.GroupDAO;
+
+import java.util.List;
+
 public class GroupTest {
 
     public static void main(String[] args) {
         GestionFactory.open();
 
-        System.out.print("Création d'un groupe  : ");
 
         final String groupName = "AW";
 
         Group group = GroupDAO.create(groupName);
-        if (group.getName().equals(groupName)) {
-            System.out.println("OK - Groupe crée : " + group);
+
+        System.out.print("GroupDAO.findById - ");
+        group = GroupDAO.findById(group.getId());
+        if (group != null && group.getName().equalsIgnoreCase(groupName)) {
+            System.out.println("OK");
         } else {
-            System.err.println("ERREUR : Espéré " + groupName + ", Reçu : " + group.getName());
+            System.err.println("ERREUR");
             return;
         }
 
-        System.out.print("Modification d'un groupe : ");
+        System.out.print("GroupDAO.update - ");
 
         final String newGroupName = "SIMO";
         group.setName(newGroupName);
         Group updatedGroup = GroupDAO.update(group);
         if (updatedGroup.getName().equals(newGroupName)) {
-            System.out.println("OK - Groupe actualisé");
-            System.out.println(updatedGroup);
+            System.out.println("OK");
         } else {
-            System.err.println("ERREUR : Espéré " + newGroupName + ", Reçu : " + updatedGroup.getName());
+            System.err.println("ERREUR");
             return;
         }
 
-       /* System.out.print("Supression du groupe créé : ");
-        GroupDAO.removeByName(group.getName());
+        System.out.print("GroupDAO.remove - ");
+        GroupDAO.remove(group);
         List<Group> groups = GroupDAO.getAll();
         if (groups.size() == 0) {
-            System.out.println("OK\n");
+            System.out.println("OK");
         } else {
-            System.err.println("\nERREUR : La suppression du groupe n'as pas fonctionnée");
+            System.err.println("ERREUR");
+            return;
+        }
+
+        System.out.print("GroupDAO.removeById - ");
+        group = GroupDAO.create(groupName);
+        GroupDAO.removeById(group.getId());
+        group = GroupDAO.findById(group.getId());
+        if (group == null) {
+            System.out.println("OK");
+        } else {
+            System.err.println("ERREUR");
             return;
         }
 
 
-        System.out.println("Ajout de plusieurs groupes");
         final String[] names = {"SIMO", "A1", "A2"};
         for (String name : names) {
             GroupDAO.create(name);
         }
         groups = GroupDAO.getAll();
-        System.out.print("\tNombre de groupe créés : " + groups.size() + ". Espéré : " + names.length);
+        System.out.print("GroupDAO.getAll - ");
         if (groups.size() == names.length) {
-            System.out.println(" - OK\n");
+            System.out.println("OK");
         } else {
-            System.err.println("\nERREUR : Dans l'ajout de groupes");
+            System.err.println("ERREUR");
             return;
         }
 
-
-
-
-        System.out.println("Suppression de tous les groupes");
         GroupDAO.removeAll();
         groups = GroupDAO.getAll();
-        System.out.print("\tNombre de groupe : " + groups.size() + ". Espéré : 0");
+        System.out.print("GroupDAO.removeAll - ");
         if (groups.size() == 0) {
-            System.out.println(" - OK\n");
+            System.out.println("OK");
         } else {
-            System.err.println("\nERREUR : Dans la suppression de tous les groupes");
+            System.err.println("ERREUR");
             return;
-        }*/
-
+        }
 
         GestionFactory.close();
     }
