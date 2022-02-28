@@ -3,7 +3,6 @@ package fr.iut2.ProjetJPA.data;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnit;
 
 public class GestionFactory {
 

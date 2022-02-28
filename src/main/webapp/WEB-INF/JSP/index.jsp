@@ -16,9 +16,10 @@
                 <p class="card-text">Sur cette plateforme vous pourez gerer l'enssemble des informations liées aux étudiants.</p>
                 <ul>
                     <li><a href="<%= application.getContextPath() %>/do/students">Étudiants</a></li>
-                    <li><a href="<%= application.getContextPath() %>/do/groups">Groupes</a></li>
                     <li><a href="<%= application.getContextPath() %>/do/absences">Absences</a></li>
-                    <li><a href="<%= application.getContextPath() %>/do/marks">Notes</a></li>
+                    <li><a href="<%= application.getContextPath() %>/do/groups">Groupes</a></li>
+                    <li><a href="<%= application.getContextPath() %>/do/modules">Modules</a></li>
+                    <li><a href="<%= application.getContextPath() %>/do/exams">Examens</a></li>
                     <li>...</li>
                 </ul>
             </div>

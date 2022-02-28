@@ -1,5 +1,5 @@
 /**
- * @author hb
+ * @author Joris MARTIN
  */
 
 // Numéro 63
@@ -219,22 +219,42 @@ public class Controller extends HttpServlet {
         int studentId = Integer.parseInt(request.getParameter("id"));
         Student student = StudentDAO.findById(studentId);
         List<Group> groups = GroupDAO.getAll();
+        List<Module> modules = student.getGroup().getModules();
 
         request.setAttribute("student", student);
         request.setAttribute("groups", groups);
-        request.setAttribute("modules", student.getGroup().getModules());
 
-        float average = 0;
-        int coefSum = 0;
+        Map<Module, Float> modulesAverage = new HashMap<>();
 
-        for (Mark mark : student.getMarks()) {
-            average += mark.getValue() * mark.getExam().getCoeficient();
-            coefSum += mark.getExam().getCoeficient();
+        float globalAverage = 0.0f;
+        int computedModule = 0;
+
+        for (Module module : modules) {
+            float moduleAverage = 0.0f;
+            int moduleCoef = 0;
+            for (Exam exam : module.getExams()) {
+                Mark studentMark = student.getMarkFromExam(exam);
+                if (studentMark != null)  {
+                    moduleAverage += studentMark.getValue() * exam.getCoeficient();
+                    moduleCoef += exam.getCoeficient();
+                }
+            }
+
+            if (moduleAverage > 0) {
+                moduleAverage = moduleAverage / moduleCoef;
+
+                modulesAverage.put(module, Math.round(moduleAverage * 100.0f) / 100.0f);
+                globalAverage += moduleAverage;
+                computedModule ++;
+            } else {
+                modulesAverage.put(module, -1.0f);
+            }
         }
 
-        average = average / coefSum;
+        globalAverage = globalAverage / computedModule;
 
-        request.setAttribute("marksAverage", average);
+        request.setAttribute("modules", modulesAverage);
+        request.setAttribute("globalAverage", Math.round(globalAverage * 100.0f) / 100.0f);
 
         loadJSP(urlStudent, request, response);
     }

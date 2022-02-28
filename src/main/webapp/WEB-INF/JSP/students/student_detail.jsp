@@ -12,8 +12,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="student" type="fr.iut2.ProjetJPA.data.student.Student" scope="request"/>
 <jsp:useBean id="groups" type="java.util.List<fr.iut2.ProjetJPA.data.group.Group>" scope="request"/>
-<jsp:useBean id="modules" type="java.util.List<fr.iut2.ProjetJPA.data.module.Module>" scope="request" />
-<jsp:useBean id="marksAverage" type="java.lang.Float" scope="request" />
+<jsp:useBean id="modules" type="java.util.Map<fr.iut2.ProjetJPA.data.module.Module, java.lang.Float>" scope="request" />
+<jsp:useBean id="globalAverage" type="java.lang.Float" scope="request" />
 <html lang="fr">
     <head>
         <title><%= application.getInitParameter("title")%> - <%=student.getName()%></title>
@@ -81,32 +81,56 @@
                     <thead>
                         <th scope="col">Module</th>
                         <th scope="col">Examen</th>
+                        <th scope="col">Coef</th>
+                        <th scope="col">Notes</th>
+                        <th scope="col">Moyenne</th>
                     </thead>
                     <tbody>
-                        <% for (Module module : modules) { %>
-                            <tr>
+                        <% for (Module module : modules.keySet()) { %>
+                            <tr style="vertical-align: middle">
                                 <td><%=module.getName()%></td>
                                 <td>
+                                    <% for (Exam exam : module.getExams()) { %>
+                                        <p><%=exam.getName()%></p>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% for (Exam exam : module.getExams()) { %>
+                                    <p><%=exam.getCoeficient()%></p>
+                                    <% } %>
+                                </td>
+                                <td>
                                     <% for (Exam exam : module.getExams()) {
-                                        Mark mark = student.getMarkFromExam(exam);
+                                        Mark studentMark = student.getMarkFromExam(exam);
                                     %>
-                                        <div class="row">
-                                            <div class="col">
-                                                <%=exam.getName()%>
-                                            </div>
-                                            <div class="col">
-                                                <% if (mark != null) { %>
-                                                    <span class="badge bg-<%=mark.getValue() <= 10.0 ? "danger" : "success"%>"><%=mark.getValue()%> / 20</span>
-                                                <% } else { %>
-                                                    <span class="badge bg-info">Non-renseignée</span>
-                                                <% } %>
-                                            </div>
-                                        </div>
+                                        <% if (studentMark != null) { %>
+                                            <p style="font-size: 1.1em">
+                                                <span class="badge bg-<%=studentMark.getValue() <= 10 ? "danger" : "success"%>"><%=studentMark.getValue()%> / 20</span>
+                                            </p>
+                                        <% } else { %>
+                                            <p style="font-size: 1.1em">
+                                                <span class="badge bg-info">Non-renseignée</span>
+                                            </p>
+                                        <% } %>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <%
+                                        float moduleAverage = modules.get(module);
+                                        if (moduleAverage >= 0) {
+                                    %>
+                                        <p style="font-size: 1.2em" class="badge bg-<%=moduleAverage <= 10 ? "danger" : "success"%>"><%=moduleAverage%> / 20</p>
                                     <% } %>
                                 </td>
                             </tr>
                         <% } %>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Moyenne :</td>
+                            <td style="font-size: 2em"><span class="badge bg-<%=globalAverage <= 10 ? "danger" : "success"%>"><%=globalAverage%> / 20</span></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
